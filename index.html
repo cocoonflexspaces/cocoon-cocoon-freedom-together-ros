@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ROS — Casa Luz / Freedom Together Foundation · July 7–9, 2026</title>
+<style>
+  :root {
+    --cream:      #F5F2E8;
+    --cream-deep: #ECE7D6;
+    --cream-warm: #EFE9D7;
+    --terracotta: #F54029;
+    --teal:       #275453;
+    --ink:        #1A1A1A;
+    --ink-soft:   #4A4A4A;
+    --rule:       rgba(26,26,26,0.12);
+    --pending-bg: #FFF7ED;
+    --pending-border: #F59E0B;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    background: var(--ink);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 40px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .topbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .topbar-mark {
+    height: 28px;
+    width: auto;
+    display: block;
+    filter: brightness(0) invert(1);
+  }
+  .topbar-wordmark {
+    height: 16px;
+    width: auto;
+    display: block;
+    filter: brightness(0) invert(1);
+  }
+  .topbar-sep {
+    color: rgba(255,255,255,0.3);
+    font-weight: 300;
+  }
+  .topbar-title {
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 0.02em;
+  }
+  .topbar-meta {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.04em;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--terracotta);
+    color: white;
+    padding: 48px 40px 40px;
+  }
+.hero-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.75;
+    margin-bottom: 10px;
+  }
+  .hero-title {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 8px;
+  }
+  .hero-sub {
+    font-size: 16px;
+    opacity: 0.85;
+    font-weight: 400;
+  }
+  .hero-meta {
+    display: flex;
+    gap: 32px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+  }
+  .hero-meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .hero-meta-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+  .hero-meta-value {
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  /* ── LAYOUT ── */
+  .main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 40px 80px;
+  }
+
+  /* ── SECTION ── */
+  .section {
+    margin-bottom: 48px;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--terracotta);
+  }
+  .section-eyebrow {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+  }
+  .section-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  /* ── INFO GRID ── */
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  .info-card {
+    background: white;
+    border-radius: 8px;
+    padding: 16px 18px;
+    border: 1px solid var(--rule);
+  }
+  .info-card-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+  .info-card-value {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.4;
+  }
+  .info-card-value a {
+    color: var(--terracotta);
+    text-decoration: none;
+  }
+
+  /* ── COMMUNICATION BANNER ── */
+  .comm-banner {
+    background: var(--teal);
+    color: white;
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .comm-banner strong {
+    font-weight: 700;
+  }
+
+  /* ── VENDOR BLOCKS ── */
+  .vendor-block {
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .vendor-header {
+    background: var(--cream-deep);
+    padding: 12px 20px;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .vendor-name {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .vendor-note {
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+  .vendor-body {
+    padding: 16px 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+  }
+  .vendor-category h4 {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .vendor-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    padding: 3px 0;
+    color: var(--ink);
+  }
+  .vendor-item-qty {
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+  .vendor-logistics {
+    padding: 12px 20px;
+    background: var(--cream);
+    border-top: 1px solid var(--rule);
+    font-size: 12px;
+    color: var(--ink-soft);
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .vendor-logistics span strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* ── DAY BLOCK ── */
+  .day-block {
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+  .day-header {
+    background: var(--ink);
+    color: white;
+    padding: 14px 20px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .day-label {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .day-hours {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+    font-weight: 400;
+  }
+  .schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .schedule-table tr {
+    border-bottom: 1px solid var(--rule);
+  }
+  .schedule-table tr:last-child {
+    border-bottom: none;
+  }
+  .schedule-table tr:hover {
+    background: var(--cream);
+  }
+  .schedule-table td {
+    padding: 10px 20px;
+    vertical-align: top;
+    font-size: 13px;
+  }
+  .schedule-table td.time {
+    width: 130px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    white-space: nowrap;
+  }
+  .schedule-table td.item {
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  .schedule-table tr.highlight td.time {
+    color: var(--terracotta);
+    font-weight: 700;
+  }
+  .schedule-table tr.cm-row td.time {
+    color: var(--teal);
+    font-weight: 700;
+  }
+  .schedule-table tr.cm-row td.item {
+    color: var(--teal);
+    font-weight: 500;
+  }
+
+  /* Pending rows */
+  .schedule-table tr.pending-row td {
+    background: var(--pending-bg);
+  }
+  .pending-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--pending-border);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 4px;
+    margin-bottom: 3px;
+  }
+  .pending-text {
+    font-size: 13px;
+    color: #92400E;
+    line-height: 1.4;
+  }
+
+  /* Sub-items (snacks, menus) */
+  .sub-items {
+    margin-top: 4px;
+    padding-left: 12px;
+    font-size: 12px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+  .sub-items li {
+    list-style: none;
+  }
+  .sub-items li::before {
+    content: "· ";
+    color: var(--terracotta);
+  }
+
+  /* ── SETUP NOTES ── */
+  .notes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .notes-card {
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 20px;
+  }
+  .notes-card h4 {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .notes-card ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .notes-card ul li {
+    font-size: 13px;
+    color: var(--ink);
+    line-height: 1.45;
+    padding-left: 14px;
+    position: relative;
+  }
+  .notes-card ul li::before {
+    content: "•";
+    color: var(--terracotta);
+    position: absolute;
+    left: 0;
+    font-size: 14px;
+    line-height: 1.3;
+  }
+
+  /* ── OPEN ITEMS ── */
+  .open-items {
+    background: var(--pending-bg);
+    border: 1px solid var(--pending-border);
+    border-radius: 10px;
+    padding: 20px 24px;
+  }
+  .open-items h4 {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #92400E;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .open-items ol {
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .open-items ol li {
+    font-size: 13px;
+    color: #78350F;
+    line-height: 1.45;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    background: var(--ink);
+    color: rgba(255,255,255,0.5);
+    padding: 20px 40px;
+    font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .footer strong {
+    color: white;
+  }
+
+  @media print {
+    .topbar { position: static; }
+    .day-block, .vendor-block, .notes-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="topbar-brand">
+      <img class="topbar-mark" src="img/cocoon/mark-128.png" alt="">
+      <img class="topbar-wordmark" src="img/cocoon/wordmark-320.png" alt="Cocoon">
+    </div>
+    <span class="topbar-sep">×</span>
+    <span class="topbar-title">Run of Show — Internal</span>
+  </div>
+  <span class="topbar-meta">Booking COS-2891 · July 7–9, 2026</span>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Run of Show</div>
+  <div class="hero-title">Freedom Together Foundation<br>Leadership Team Retreat</div>
+  <div class="hero-sub">Casa Luz · Floor 2 Only</div>
+  <div class="hero-meta">
+    <div class="hero-meta-item">
+      <span class="hero-meta-label">Dates</span>
+      <span class="hero-meta-value">July 7–9, 2026</span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="hero-meta-label">Headcount</span>
+      <span class="hero-meta-value">15 guests</span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="hero-meta-label">Booking</span>
+      <span class="hero-meta-value">COS-2891</span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="hero-meta-label">Tax Status</span>
+      <span class="hero-meta-value">Fully exempt ✓</span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="hero-meta-label">Cocoon POC</span>
+      <span class="hero-meta-value">Eduard Monteagudo</span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="hero-meta-label">Client POC On-Site</span>
+      <span class="hero-meta-value">Soomin Lee · 732-675-9393</span>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- COMMUNICATION -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-eyebrow">📱</span>
+      <span class="section-title">Day-of Communication</span>
+    </div>
+    <div class="comm-banner">
+      Roger to initiate a <strong>group text with Soomin + Eduard</strong> on Day 1 morning for day-of coordination.
+      <br><br>
+      <strong>L&amp;O Catering Contact (Day 1):</strong> Nikola Trifunovic · 206-619-6661<br>
+      <strong>Client On-Site Contact:</strong> Roger Dong · 646-643-0947
+    </div>
+  </div>
+
+  <!-- VENDOR BREAKDOWN -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-eyebrow">🏛</span>
+      <span class="section-title">Vendor Breakdown — Furniture &amp; Equipment</span>
+    </div>
+
+    <!-- Lightning Society -->
+    <div class="vendor-block">
+      <div class="vendor-header">
+        <span class="vendor-name">Lightning Society</span>
+        <span class="vendor-note">In-house rentals · included with booking</span>
+      </div>
+      <div class="vendor-body">
+        <div class="vendor-category">
+          <h4>Seating</h4>
+          <div class="vendor-item"><span>Channing Swivel Chair</span><span class="vendor-item-qty">×4</span></div>
+          <div class="vendor-item"><span>Augustine Swivel Chair</span><span class="vendor-item-qty">×2</span></div>
+          <div class="vendor-item"><span>Ellsworth Sofa</span><span class="vendor-item-qty">×1</span></div>
+          <div class="vendor-item"><span>Warren Chair</span><span class="vendor-item-qty">×1</span></div>
+          <div class="vendor-item"><span>Sinclair Round Ottoman</span><span class="vendor-item-qty">×4</span></div>
+          <div class="vendor-item"><span>Tufted Ottoman (Green)</span><span class="vendor-item-qty">×1</span></div>
+          <div class="vendor-item"><span>White Banquet Chairs</span><span class="vendor-item-qty">×16</span></div>
+        </div>
+        <div class="vendor-category">
+          <h4>Tables</h4>
+          <div class="vendor-item"><span>Ingrid Coffee Table</span><span class="vendor-item-qty">×1</span></div>
+          <div class="vendor-item"><span>Figueroa End Table</span><span class="vendor-item-qty">×2</span></div>
+          <div class="vendor-item"><span>Corbett End Table</span><span class="vendor-item-qty">×1</span></div>
+          <div class="vendor-item"><span>Corbett Coffee Table</span><span class="vendor-item-qty">×1</span></div>
+          <div class="vendor-item"><span>Lucy Bistro Table 36" (projector)</span><span class="vendor-item-qty">×1</span></div>
+          <div class="vendor-item"><span>Folding Table</span><span class="vendor-item-qty">×1</span></div>
+        </div>
+        <div class="vendor-category">
+          <h4>Decor</h4>
+          <div class="vendor-item"><span>Industrial Clothing Rack</span><span class="vendor-item-qty">×1</span></div>
+          <div class="vendor-item"><span>Faux Olive Tree</span><span class="vendor-item-qty">×2</span></div>
+          <div class="vendor-item"><span>Faux Pieris Tree</span><span class="vendor-item-qty">×2</span></div>
+          <h4 style="margin-top:12px">Lighting</h4>
+          <div class="vendor-item"><span>Nerissa Floor Lamp</span><span class="vendor-item-qty">×3</span></div>
+          <div class="vendor-item"><span>Fordham Floor Lamp</span><span class="vendor-item-qty">×1</span></div>
+        </div>
+        <div class="vendor-category">
+          <h4>AV</h4>
+          <div class="vendor-item"><span>Sonos/Sonance In-Wall Surround</span><span class="vendor-item-qty">×1</span></div>
+          <div class="vendor-item"><span>Panasonic RZ570 Projector</span><span class="vendor-item-qty">×1</span></div>
+          <div class="vendor-item" style="color:var(--ink-soft);font-size:12px"><span>75" screen included</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Broadway Party Rentals -->
+    <div class="vendor-block">
+      <div class="vendor-header">
+        <span class="vendor-name">Broadway Party Rentals</span>
+        <span class="vendor-note">External — delivered Day 1, picked up Day 3</span>
+      </div>
+      <div class="vendor-body">
+        <div class="vendor-category">
+          <h4>Seating</h4>
+          <div class="vendor-item"><span>Gramercy Gold Banquet Chair</span><span class="vendor-item-qty">×14</span></div>
+        </div>
+        <div class="vendor-category">
+          <h4>Tables &amp; Linens</h4>
+          <div class="vendor-item"><span>Banquet Table 6-ft</span><span class="vendor-item-qty">×7</span></div>
+          <div class="vendor-item"><span>Black Linen</span><span class="vendor-item-qty">×7</span></div>
+        </div>
+        <div class="vendor-category">
+          <h4>Place Settings</h4>
+          <div class="vendor-item"><span>Flatware</span></div>
+          <div class="vendor-item"><span>Glassware</span></div>
+          <div class="vendor-item"><span>China</span></div>
+        </div>
+      </div>
+      <div class="vendor-logistics">
+        <span><strong>Delivery:</strong> Day 1 morning, within 9 AM–2 PM setup window</span>
+        <span><strong>Pickup:</strong> Day 3, 5:00–9:00 PM</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 1 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-eyebrow">Day 1</span>
+      <span class="section-title">Tuesday, July 7</span>
+    </div>
+    <div class="day-block">
+      <div class="day-header">
+        <span class="day-label">Tuesday, July 7, 2026</span>
+        <span class="day-hours">9:00 AM – 9:00 PM · 12 hours</span>
+      </div>
+      <table class="schedule-table">
+        <tr class="cm-row">
+          <td class="time">8:00 AM</td>
+          <td class="item">Roger arrives — space access open</td>
+        </tr>
+        <tr>
+          <td class="time">9:00 AM–2:00 PM</td>
+          <td class="item">
+            Setup window — furniture placement. Roger to assist Soomin with layout (hands-on help requested).<br>
+            <span style="color:var(--ink-soft);font-size:12px">BPR delivery expected: 7 banquet tables + black linens, 14 Gramercy Gold chairs</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="time">2:00 PM</td>
+          <td class="item">Space fully set — ready for client walkthrough</td>
+        </tr>
+        <tr class="highlight">
+          <td class="time">2:30 PM</td>
+          <td class="item">
+            Catering team arrives
+            <span style="font-size:12px;color:var(--ink-soft)"> · L&amp;O | Nikola Trifunovic: 206-619-6661</span><br>
+            <span style="font-size:12px;color:var(--ink-soft)">No breakfast service on Day 1</span>
+          </td>
+        </tr>
+        <tr class="highlight">
+          <td class="time">3:30 PM</td>
+          <td class="item">
+            ☕ PM Coffee Break
+            <ul class="sub-items">
+              <li>Charcuterie &amp; Cheese Platter</li>
+              <li>Potato Chips</li>
+              <li>Honey Oat Bars</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td class="time">4:00 PM</td>
+          <td class="item">Meeting begins</td>
+        </tr>
+        <tr class="highlight">
+          <td class="time">6:30 PM</td>
+          <td class="item">🍽 Dinner service begins</td>
+        </tr>
+        <tr>
+          <td class="time">8:30 PM</td>
+          <td class="item">Event / catering ends</td>
+        </tr>
+        <tr class="cm-row">
+          <td class="time">9:15 PM</td>
+          <td class="item">Roger departs</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- DAY 2 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-eyebrow">Day 2</span>
+      <span class="section-title">Wednesday, July 8</span>
+    </div>
+    <div class="day-block">
+      <div class="day-header">
+        <span class="day-label">Wednesday, July 8, 2026</span>
+        <span class="day-hours">9:00 AM – 6:00 PM · 9 hours</span>
+      </div>
+      <table class="schedule-table">
+        <tr class="cm-row">
+          <td class="time">8:45 AM</td>
+          <td class="item">Roger arrives — space access open</td>
+        </tr>
+        <tr class="pending-row">
+          <td class="time" style="padding-top:12px">⏳</td>
+          <td class="item" style="padding-top:12px">
+            <div class="pending-badge">Pending</div>
+            <div class="pending-text">Caterer arrival time for breakfast — awaiting confirmation</div>
+          </td>
+        </tr>
+        <tr>
+          <td class="time">9:00 AM</td>
+          <td class="item">🍳 Breakfast service begins</td>
+        </tr>
+        <tr class="pending-row">
+          <td class="time">⏳</td>
+          <td class="item">
+            <div class="pending-badge">Pending</div>
+            <div class="pending-text">AM Coffee break time — awaiting confirmation</div>
+          </td>
+        </tr>
+        <tr>
+          <td class="time"></td>
+          <td class="item">
+            ☕ AM Coffee Break
+            <ul class="sub-items">
+              <li>Sweet Potato Chips</li>
+              <li>Assorted Spiced Nuts</li>
+              <li>Vegan Energy Balls</li>
+            </ul>
+          </td>
+        </tr>
+        <tr class="pending-row">
+          <td class="time">⏳</td>
+          <td class="item">
+            <div class="pending-badge">Pending</div>
+            <div class="pending-text">Lunch time — awaiting confirmation</div>
+          </td>
+        </tr>
+        <tr>
+          <td class="time"></td>
+          <td class="item">🥗 Lunch</td>
+        </tr>
+        <tr class="pending-row">
+          <td class="time">⏳</td>
+          <td class="item">
+            <div class="pending-badge">Pending</div>
+            <div class="pending-text">PM Coffee break time — awaiting confirmation</div>
+          </td>
+        </tr>
+        <tr>
+          <td class="time"></td>
+          <td class="item">
+            ☕ PM Coffee Break
+            <ul class="sub-items">
+              <li>Coconut Yogurt Parfait Cup</li>
+              <li>Guacamole &amp; Tortilla Chips</li>
+              <li>Brownies</li>
+            </ul>
+          </td>
+        </tr>
+        <tr class="pending-row">
+          <td class="time">⏳</td>
+          <td class="item">
+            <div class="pending-badge">Pending</div>
+            <div class="pending-text">Does Day 2 catering include dinner? (booking ends at 6 PM)</div>
+          </td>
+        </tr>
+        <tr class="cm-row">
+          <td class="time">6:15 PM</td>
+          <td class="item">Roger departs</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- DAY 3 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-eyebrow">Day 3</span>
+      <span class="section-title">Thursday, July 9</span>
+    </div>
+    <div class="day-block">
+      <div class="day-header">
+        <span class="day-label">Thursday, July 9, 2026</span>
+        <span class="day-hours">9:00 AM – 9:00 PM · 12 hours</span>
+      </div>
+      <table class="schedule-table">
+        <tr class="cm-row">
+          <td class="time">8:45 AM</td>
+          <td class="item">Roger arrives — space access open</td>
+        </tr>
+        <tr class="pending-row">
+          <td class="time">⏳</td>
+          <td class="item">
+            <div class="pending-badge">Pending</div>
+            <div class="pending-text">Caterer arrival time for breakfast — awaiting confirmation</div>
+          </td>
+        </tr>
+        <tr>
+          <td class="time">9:00 AM</td>
+          <td class="item">🍳 Breakfast service begins</td>
+        </tr>
+        <tr class="pending-row">
+          <td class="time">⏳</td>
+          <td class="item">
+            <div class="pending-badge">Pending</div>
+            <div class="pending-text">AM Coffee break time — awaiting confirmation</div>
+          </td>
+        </tr>
+        <tr>
+          <td class="time"></td>
+          <td class="item">
+            ☕ AM Coffee Break
+            <ul class="sub-items">
+              <li>Crispy Curly Kale Chips</li>
+              <li>Popcorn</li>
+              <li>Honey Oat Bars</li>
+            </ul>
+          </td>
+        </tr>
+        <tr class="pending-row">
+          <td class="time">⏳</td>
+          <td class="item">
+            <div class="pending-badge">Pending</div>
+            <div class="pending-text">Lunch time — awaiting confirmation</div>
+          </td>
+        </tr>
+        <tr>
+          <td class="time"></td>
+          <td class="item">🥗 Lunch</td>
+        </tr>
+        <tr class="pending-row">
+          <td class="time">⏳</td>
+          <td class="item">
+            <div class="pending-badge">Pending</div>
+            <div class="pending-text">PM Coffee break time — awaiting confirmation</div>
+          </td>
+        </tr>
+        <tr>
+          <td class="time"></td>
+          <td class="item">
+            ☕ PM Coffee Break
+            <ul class="sub-items">
+              <li>Crudité &amp; Hummus Box</li>
+              <li>Charcuterie &amp; Cheese Platter</li>
+              <li>Assorted Cookies</li>
+            </ul>
+          </td>
+        </tr>
+        <tr class="pending-row">
+          <td class="time">⏳</td>
+          <td class="item">
+            <div class="pending-badge">Pending</div>
+            <div class="pending-text">Dinner service time — awaiting confirmation</div>
+          </td>
+        </tr>
+        <tr>
+          <td class="time">5:00–9:00 PM</td>
+          <td class="item">BPR breakdown &amp; pickup (tables, chairs, linens)</td>
+        </tr>
+        <tr class="cm-row">
+          <td class="time">10:00 PM</td>
+          <td class="item">Roger departs</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- SETUP NOTES -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-eyebrow">📋</span>
+      <span class="section-title">Setup Notes</span>
+    </div>
+    <div class="notes-grid">
+      <div class="notes-card">
+        <h4>Furniture &amp; Layout</h4>
+        <ul>
+          <li>Roger to help Soomin with furniture placement Day 1 (9 AM–2 PM)</li>
+          <li>Circle of chairs: 14 white banquet chairs (in-house folding)</li>
+          <li>Lounge seating: 4 Channing + 2 Augustine swivel, 1 Ellsworth Sofa, 1 Warren Chair, 4 Sinclair Round Ottomans, 1 Tufted Ottoman (Green)</li>
+          <li>Tables: 7 BPR 6-ft banquet tables + black linens (incl. 1 food display), 1 Ingrid Coffee Table, 2 Figueroa End Tables, 1 Corbett End Table, 1 Lucy Bistro Table (projector stand)</li>
+          <li>Plants: 2 Faux Olive Trees, 2 Faux Pieris Trees</li>
+          <li>Lighting: 3× Nerissa Floor Lamps, 1× Fordham Floor Lamp</li>
+          <li>Clothing rack + folding table on site</li>
+        </ul>
+      </div>
+      <div class="notes-card">
+        <h4>AV</h4>
+        <ul>
+          <li>Projector: Panasonic RZ570 (Lightning Society rental) — on Lucy Bistro Table</li>
+          <li><span style="color:#92400E">⏳ Screen: sourcing in progress — Roger to set up at no charge if available; project to wall in the meantime</span></li>
+          <li>Power strips: available on site ✓</li>
+          <li>No printer on site — client is aware, will use nearby Staples</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPEN ITEMS -->
+  <div class="section">
+    <div class="open-items">
+      <h4>⏳ Open Items — Pending Resolution</h4>
+      <ol>
+        <li>Caterer arrival times for Days 2 &amp; 3 (all meal services)</li>
+        <li>Does Day 2 catering include dinner? (booking ends 6 PM)</li>
+        <li>Day 2 &amp; 3 dinner service times (awaiting caterer confirmation)</li>
+        <li>Projector screen — being sourced; Roger to be notified when confirmed</li>
+      </ol>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- FOOTER -->
+<div class="footer">
+  <span>Cocoon Flex Spaces · Internal document — not for client distribution</span>
+  <span>Eduard Monteagudo · <a href="mailto:eduard@cocoonflexspaces.com" style="color:rgba(255,255,255,0.5)">eduard@cocoonflexspaces.com</a></span>
+</div>
+
+</body>
+</html>
